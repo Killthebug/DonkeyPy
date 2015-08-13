@@ -16,20 +16,24 @@ import math
 import getopt
 import random
 import Person
+import Human
 import Board
 import Donkey
+import Ladder
 from socket import *
 from pygame.locals import *
 from Person import *
 from Donkey import *
 from Board import *
+from Human import *
+from Ladder import *
 
 #Important to begin and initialize everything
 pygame.init()
 
 #Determine the dimension
 display_Width = 1200
-display_Height = 450
+display_Height = 600
 image_Width = 30
 image_Height = 30
 
@@ -60,20 +64,54 @@ donkey = Donkey()
 #Introduce the Boards
 board = Board()
 
+#Introduce the Ladders
+ladder_1 = Ladder()
+ladder_2 = Ladder()
+ladder_3 = Ladder()
+ladder_4 = Ladder()
+ladder_5 = Ladder()
+
+#Introduce the Villian
+man = Human()
+
+def canClimb():
+    if donkey.x ==
+
+def changePosition(ladder, x, y):
+    """ Function modifies the postion of the ladder """
+    ladder.x = x
+    ladder.y = y
+
+def makeLadders():
+    changePosition(ladder_1,200,150)
+    renderImage(ladder_1.body, ladder_1.x, ladder_1.y)
+    changePosition(ladder_2,400,250)
+    renderImage(ladder_2.body, ladder_2.x, ladder_2.y)
+    changePosition(ladder_3,800,350)
+    renderImage(ladder_3.body, ladder_3.x, ladder_3.y)
+    changePosition(ladder_4,800,395)
+    renderImage(ladder_4.body, ladder_4.x, ladder_4.y)
+    changePosition(ladder_5,546,500)
+    renderImage(ladder_5.body, ladder_5.x, ladder_5.y)
+
 def generateBoard():
     for i in range(0,45):
-        DISPLAYSURF.blit(board.image,(i*30,420))
+        DISPLAYSURF.blit(board.image,(i*30,570))
     for i in range(0,30):
-        DISPLAYSURF.blit(board.image,(300+i*30,300))
+        DISPLAYSURF.blit(board.image,(100+i*30,470))
     for i in range(0,30):
-        DISPLAYSURF.blit(board.image,(i*30,180))
+        DISPLAYSURF.blit(board.image,(300+i*30,320))
+    for i in range(0,30):
+        DISPLAYSURF.blit(board.image,(i*30,220))
     for i in range(0,15):
-        DISPLAYSURF.blit(board.image,(150+i*30,80))
-
+        DISPLAYSURF.blit(board.image,(150+i*30,120))
 
 def boundaryCheck():
     if donkey.x > display_Width - image_Width or donkey.x < 0:
-        donkey.stop()
+        donkey.x_Stop()
+    if donkey.y > 538:
+        donkey.y_Stop()
+    canClimb()
 
 def renderImage(body,x,y):
     DISPLAYSURF.blit(body,(x,y))
@@ -99,7 +137,7 @@ def main():
 
             elif event.key == pygame.K_DOWN:
                 donkey.moveDown()
-
+        
         if event.type == pygame.KEYUP:
             donkey.reset()
 
@@ -109,11 +147,15 @@ def main():
         #Once the background has been generated we make the board
         generateBoard()
         
+        #Make the ladders
+        makeLadders()
+
         #Function Call the check if over flow occurs
         boundaryCheck()
 
         #Change the Display location of the Donkey
         renderImage(donkey.body, donkey.x, donkey.y)
+        renderImage(man.player, man.x, man.y)
 
         #Update the screen to show the latest changes
         pygame.display.update()
