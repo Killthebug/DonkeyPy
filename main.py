@@ -74,13 +74,26 @@ ladder_5 = Ladder()
 #Introduce the Villian
 man = Human()
 
-def canClimb():
-    if donkey.x ==
-
 def changePosition(ladder, x, y):
     """ Function modifies the postion of the ladder """
     ladder.x = x
     ladder.y = y
+
+def canClimb():
+    m = donkey.x
+    n = donkey.y
+    if m > ladder_1.x-10 and m <ladder_1.x+10:
+        donkey.canClimbUp = True
+    elif m > ladder_2.x-10 and m <ladder_2.x+10:
+        donkey.canClimbUp = True
+    elif m > ladder_3.x-10 and m <ladder_3.x+10:
+        donkey.canClimbUp = True
+    elif m > ladder_4.x-10 and m <ladder_4.x+10:
+        donkey.canClimbUp = True
+    elif m > ladder_5.x-10 and m <ladder_5.x+10:
+        donkey.canClimbUp = True
+    else:
+        donkey.canClimbUp = False
 
 def makeLadders():
     changePosition(ladder_1,200,150)
@@ -111,7 +124,25 @@ def boundaryCheck():
         donkey.x_Stop()
     if donkey.y > 538:
         donkey.y_Stop()
+
+def canGoUp():
+    y = donkey.y
     canClimb()
+    if donkey.canClimbUp == True:
+        if y <= ladder_1.y+70 and y >= ladder_1.y-60:
+            donkey.canClimbUp = True
+        elif y <= ladder_2.y+70 and y >= ladder_2.y-60:
+            donkey.canClimbUp = True
+        elif y <= ladder_3.y+70 and y >= ladder_3.y-60:
+            donkey.canClimbUp = True
+        elif y <= ladder_4.y+70 and y >= ladder_4.y-60:
+            donkey.canClimbUp = True
+        elif y <= ladder_5.y+70 and y >= ladder_5.y-60:
+            donkey.canClimbUp = True
+        else :
+            donkey.canClimbUp = False
+    if donkey.canClimbUp == False:
+        donkey.y_Stop()
 
 def renderImage(body,x,y):
     DISPLAYSURF.blit(body,(x,y))
@@ -134,12 +165,14 @@ def main():
 
             elif event.key == pygame.K_UP:
                 donkey.moveUp()
+                canGoUp()
 
             elif event.key == pygame.K_DOWN:
                 donkey.moveDown()
         
         if event.type == pygame.KEYUP:
             donkey.reset()
+            donkey.canClimbUp = False
 
         #The very first and bottom most layer
         DISPLAYSURF.fill(blue)
@@ -159,7 +192,7 @@ def main():
 
         #Update the screen to show the latest changes
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(40)
 
 
 if __name__ == '__main__': 
