@@ -79,21 +79,6 @@ def changePosition(ladder, x, y):
     ladder.x = x
     ladder.y = y
 
-def canClimb():
-    m = donkey.x
-    n = donkey.y
-    if m > ladder_1.x-10 and m <ladder_1.x+10:
-        donkey.canClimbUp = True
-    elif m > ladder_2.x-10 and m <ladder_2.x+10:
-        donkey.canClimbUp = True
-    elif m > ladder_3.x-10 and m <ladder_3.x+10:
-        donkey.canClimbUp = True
-    elif m > ladder_4.x-10 and m <ladder_4.x+10:
-        donkey.canClimbUp = True
-    elif m > ladder_5.x-10 and m <ladder_5.x+10:
-        donkey.canClimbUp = True
-    else:
-        donkey.canClimbUp = False
 
 def makeLadders():
     changePosition(ladder_1,200,150)
@@ -125,22 +110,37 @@ def boundaryCheck():
     if donkey.y > 538:
         donkey.y_Stop()
 
-def canGoUp():
+def canClimb():
+    m = donkey.x
     y = donkey.y
-    canClimb()
-    if donkey.canClimbUp == True:
+    if m > ladder_1.x-10 and m <ladder_1.x+10:
         if y <= ladder_1.y+70 and y >= ladder_1.y-60:
             donkey.canClimbUp = True
-        elif y <= ladder_2.y+70 and y >= ladder_2.y-60:
-            donkey.canClimbUp = True
-        elif y <= ladder_3.y+70 and y >= ladder_3.y-60:
-            donkey.canClimbUp = True
-        elif y <= ladder_4.y+70 and y >= ladder_4.y-60:
-            donkey.canClimbUp = True
-        elif y <= ladder_5.y+70 and y >= ladder_5.y-60:
-            donkey.canClimbUp = True
-        else :
+        else:
             donkey.canClimbUp = False
+    elif m > ladder_2.x-10 and m <ladder_2.x+10:
+        if y <= ladder_2.y+80 and y >= ladder_2.y-60:
+            donkey.canClimbUp = True
+        else:
+            donkey.canClimbUp = False
+    elif m > ladder_3.x-10 and m <ladder_3.x+10:
+        if y <= ladder_3.y+100 and y >= ladder_3.y-60:
+            donkey.canClimbUp = True
+        else:
+            donkey.canClimbUp = False
+    elif m > ladder_4.x-10 and m <ladder_4.x+10:
+        if y <= ladder_4.y+70 and y >= ladder_4.y-60:
+            donkey.canClimbUp = True
+        else:
+            donkey.canClimbUp = False
+    elif m > ladder_5.x-10 and m <ladder_5.x+10:
+        if y <= ladder_5.y+70 and y >= ladder_5.y-60:
+            donkey.canClimbUp = True
+        else:
+            donkey.canClimbUp = False
+
+def canGoUp():
+    canClimb()
     if donkey.canClimbUp == False:
         donkey.y_Stop()
 
@@ -189,6 +189,7 @@ def main():
         #Change the Display location of the Donkey
         renderImage(donkey.body, donkey.x, donkey.y)
         renderImage(man.player, man.x, man.y)
+        donkey.canClimbUp == False
 
         #Update the screen to show the latest changes
         pygame.display.update()
