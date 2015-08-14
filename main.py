@@ -332,7 +332,6 @@ def collectCoin():
     block_hit_list = pygame.sprite.spritecollide(donkey,banana_list,True)
     if len(block_hit_list)>0:
         donkey.score += len(block_hit_list)*5
-        print donkey.score
 
 def checkCollision():
     for fires in fire_list:
@@ -363,7 +362,7 @@ def main():
     check = 0
     counter = 0
     while not gameOverDone:
-        if donkey.lives == 0:
+        if donkey.lives <= 0:
             donkey.Penalize()
             donkey.win = False
             gameOver = True
