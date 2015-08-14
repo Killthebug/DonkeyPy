@@ -191,11 +191,11 @@ def gravity():
     gravity_list = pygame.sprite.Group()
     gravity_list = pygame.sprite.spritecollide(donkey, block_list, False)
     if len(gravity_list) == 0 and donkey.canClimbUp == False:
-        donkey.y = donkey.y + 3
+        donkey.y = donkey.y + 1.5
 
-def printMessage(msg, color):
+def printMessage(msg, color, x, y):
     show_text = font.render(msg, True, color)
-    DISPLAYSURF.blit(show_text,[1100,10])
+    DISPLAYSURF.blit(show_text,[x,y])
 
 def boundaryCheck():
     if donkey.x > display_Width - image_Width or donkey.x < 0 or donkey.canMoveSide == False:
@@ -298,7 +298,9 @@ def canGoDown():
 
 def Jump():
     if donkey.canJump == True:
-        donkey.Jump()
+        for i in range(210):
+            donkey.Jump()
+            renderImage(donkey.body, donkey.x, donkey.y)
     platform_hit_list = pygame.sprite.spritecollide(donkey, block_list, False)
     if len(platform_hit_list) == 0:
         donkey.canJump = False
@@ -308,10 +310,8 @@ def Jump():
 def handleFire():
     canFallDown()
     for fires in fire_list:
-        print "1 : ",fires.y
         if fires.canFallDown == True :
             fires.moveDown()
-        print "2 : ",fires.y
         DISPLAYSURF.blit(fires.image,(fires.x,fires.y))
 
 def renderImage(body,x,y):
@@ -323,7 +323,7 @@ def main():
     check = 0
     score = 0
     counter = 0
-    while not gameOver:
+    while not gameOver and donkey.lives != 0:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -356,7 +356,7 @@ def main():
         counter += 1
 
         #The very first and bottom most layer
-        DISPLAYSURF.fill(blue)
+        DISPLAYSURF.fill(black)
         
         #Once the background has been generated we make the board
         generateBoard(check)
@@ -388,6 +388,9 @@ def main():
             fire_hit_list = pygame.sprite.spritecollide(fires, block_list, False)
             fires.find_Level()
             fires.moveWeird()
+            player_fire_hit_list = pygame.sprite.spritecollide(donkey, fire_list, True)
+            if len(player_fire_hit_list) > 0:
+                donkey.lives -= 1
         
         banana_list.draw(DISPLAYSURF)
         block_hit_list = pygame.sprite.spritecollide(donkey,banana_list,True)
@@ -402,7 +405,9 @@ def main():
         
         #Showing the message
         message = "Score : "+str(score)
-        printMessage(message, white)
+        printMessage(message, white, 1100, 10)
+        message = " Lives : "+str(donkey.lives)
+        printMessage(message, white, 1100, 40)
 
         #Update the screen to show the latest changes
         pygame.display.update()

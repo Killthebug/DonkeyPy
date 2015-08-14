@@ -51,8 +51,6 @@ class Fire(pygame.sprite.Sprite):
             self.level = 1
 
     def shake_It(self, x1, x2):
-        print "x1 : ",x1
-        print self.x
         if self.x > x1 and self.x < x2:
             if self.direction == 0:
                 self.moveRight()
@@ -69,8 +67,8 @@ class Fire(pygame.sprite.Sprite):
 
     def moveWeird(self):
         if self.level == 1:
-            x1 = 30
-            x2 = 1170
+            x1 = -99999999
+            x2 = 999999999
         elif self.level == 2:
             x1 = 100
             x2 = 1000
