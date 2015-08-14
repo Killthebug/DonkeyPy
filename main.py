@@ -19,6 +19,7 @@ import Person
 import Human
 import Board
 import Banana
+import Queen
 import Donkey
 import Ladder
 import Fire
@@ -32,6 +33,7 @@ from Ladder import *
 from Banana import *
 from time import *
 from Fire import *
+from Queen import *
 
 #Important to begin and initialize everything
 pygame.init()
@@ -71,6 +73,11 @@ big_list = pygame.sprite.Group()
 #Introduce our players
 donkey = Donkey()
 big_list.add(donkey)
+
+#Introduce the Queen
+queen = Queen(150,68)
+queen_list = pygame.sprite.Group()
+queen_list.add(queen)
 
 #Introduce the Boards
 board = Board(0,0)
@@ -320,12 +327,33 @@ def renderImage(body,x,y):
 
 def main():
     gameOver = False
+    gameOverDone = False
     check = 0
     score = 0
     counter = 0
-    while not gameOver and donkey.lives != 0:
+    while not gameOverDone:
+        if donkey.lives == 0:
+            gameOver = True
+            gameOverDone = False
+
+        while gameOver == True:
+            DISPLAYSURF.fill(black)
+            message = "Final Score : "+str(score)
+            message2 = "Game Over "
+            message3 = "Thanks For Playing!"
+            printMessage(message, white, 500, 350)
+            printMessage(message2, red, 510, 250)
+            printMessage(message3, red, 470, 280)
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    gameOverDone = False
+                    pygame.quit()
+                    quit()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                gameOverDone = False
                 pygame.quit()
                 quit()
 
@@ -402,6 +430,11 @@ def main():
         #Change the Display location of the Donkey
         renderImage(donkey.body, donkey.x, donkey.y)
         renderImage(man.player, man.x, man.y)
+        renderImage(queen.image, queen.rect.x, queen.rect.y)
+            
+        win_list = pygame.sprite.spritecollide(donkey, queen_list, False)
+        if len(win_list) > 0:
+            gameOver = True
         
         #Showing the message
         message = "Score : "+str(score)
