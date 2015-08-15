@@ -113,28 +113,25 @@ def boundaryCheck():
 def canClimb():
     m = donkey.x
     y = donkey.y
-    if m > ladder_1.x-10 and m <ladder_1.x+10:
-        if y <= ladder_1.y+70 and y >= ladder_1.y-60:
+    if m > ladder_1.x-15 and m <ladder_1.x+15:
+        if y <= ladder_1.y+42 and y >= ladder_1.y-62:
             donkey.canClimbUp = True
         else:
             donkey.canClimbUp = False
-    elif m > ladder_2.x-10 and m <ladder_2.x+10:
-        if y <= ladder_2.y+80 and y >= ladder_2.y-60:
+    elif m > ladder_2.x-15 and m <ladder_2.x+15:
+        if y <= ladder_2.y+42 and y >= ladder_2.y-62:
             donkey.canClimbUp = True
         else:
             donkey.canClimbUp = False
-    elif m > ladder_3.x-10 and m <ladder_3.x+10:
-        if y <= ladder_3.y+100 and y >= ladder_3.y-60:
+    elif m > ladder_3.x-15 and m <ladder_3.x+15:
+        if y <= ladder_3.y+50 and y >= ladder_3.y-62:
+            donkey.canClimbUp = True
+        elif y <= ladder_4.y+42 and y >= ladder_4.y-62:
             donkey.canClimbUp = True
         else:
             donkey.canClimbUp = False
-    elif m > ladder_4.x-10 and m <ladder_4.x+10:
-        if y <= ladder_4.y+70 and y >= ladder_4.y-60:
-            donkey.canClimbUp = True
-        else:
-            donkey.canClimbUp = False
-    elif m > ladder_5.x-10 and m <ladder_5.x+10:
-        if y <= ladder_5.y+70 and y >= ladder_5.y-60:
+    elif m > ladder_5.x-15 and m <ladder_5.x+15:
+        if y <= ladder_5.y+70 and y >= ladder_5.y-62:
             donkey.canClimbUp = True
         else:
             donkey.canClimbUp = False
@@ -143,6 +140,12 @@ def canGoUp():
     canClimb()
     if donkey.canClimbUp == False:
         donkey.y_Stop()
+
+def canGoDown():
+    canClimb()
+    if donkey.canClimbUp == False:
+        donkey.y_Stop()
+
 
 def renderImage(body,x,y):
     DISPLAYSURF.blit(body,(x,y))
@@ -169,10 +172,10 @@ def main():
 
             elif event.key == pygame.K_DOWN:
                 donkey.moveDown()
+                canGoDown()
         
         if event.type == pygame.KEYUP:
             donkey.reset()
-            donkey.canClimbUp = False
 
         #The very first and bottom most layer
         DISPLAYSURF.fill(blue)
@@ -189,7 +192,6 @@ def main():
         #Change the Display location of the Donkey
         renderImage(donkey.body, donkey.x, donkey.y)
         renderImage(man.player, man.x, man.y)
-        donkey.canClimbUp == False
 
         #Update the screen to show the latest changes
         pygame.display.update()
