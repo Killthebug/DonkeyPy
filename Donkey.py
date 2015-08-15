@@ -5,10 +5,12 @@ import Person
 from pygame import *
 from Person import *
 
-class Donkey(Person):
+class Donkey(Person,pygame.sprite.Sprite):
     """ Child Class of Person , defined the Protagonist """
     def __init__(self):
-        self.player = pygame.image.load('donkey.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('donkey.png')
+        self.rect = self.image.get_rect()
         self.x = 30
         self.y = 538
         self.lives = 3
@@ -16,9 +18,14 @@ class Donkey(Person):
         self.body = pygame.image.load('donkey_left.png')
         self.x_Change = 0
         self.y_Change = 0
+        self.rect = self.body.get_rect()
         self.canMoveSide = True
         self.canClimbUp = False
         self.canClimbDown = False
+
+    def update(self):
+        self.rect.x = self.x
+        self.rect.y = self.y
 
     def moveLeft(self):
         self.x_Change = -5

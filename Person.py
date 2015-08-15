@@ -3,9 +3,11 @@ import os
 import sys
 from pygame import *
 
-class Person():
+class Person(pygame.sprite.Sprite):
     """ Parent class giving basic Life Attributes """
+    """ This in itself is a child class of Sprite """
     def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
         self.x = 0
         self.y = 0
         self.speed = 5

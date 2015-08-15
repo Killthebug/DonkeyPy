@@ -18,6 +18,7 @@ import random
 import Person
 import Human
 import Board
+import Banana
 import Donkey
 import Ladder
 from socket import *
@@ -27,6 +28,7 @@ from Donkey import *
 from Board import *
 from Human import *
 from Ladder import *
+from Banana import *
 
 #Important to begin and initialize everything
 pygame.init()
@@ -58,21 +60,71 @@ DOWN = 'down'
 LEFT = 'left'
 RIGHT = 'right'
 
+big_list = pygame.sprite.Group()
+
 #Introduce our players
 donkey = Donkey()
+big_list.add(donkey)
 
 #Introduce the Boards
-board = Board()
+board = Board(0,0)
+block_list = pygame.sprite.Group()
 
 #Introduce the Ladders
+ladder_list = pygame.sprite.Group()
 ladder_1 = Ladder()
+ladder_list.add(ladder_1)
 ladder_2 = Ladder()
+ladder_list.add(ladder_2)
 ladder_3 = Ladder()
+ladder_list.add(ladder_3)
 ladder_4 = Ladder()
+ladder_list.add(ladder_4)
 ladder_5 = Ladder()
+ladder_list.add(ladder_5)
+
+#Introduce the Bananas
+banana_list = pygame.sprite.Group()
+
+def makeBananas(quantity,check):
+    if check == 0 :
+        for i in range(quantity/4):
+            banana = Banana(0,0)
+            banana.x = random.randrange(0,display_Width,5)
+            banana.y = 538
+            banana.rect.x = banana.x
+            banana.rect.y = banana.y
+            banana_list.add(banana)
+            big_list.add(banana)
+        for i in range(quantity/4):
+            banana = Banana(0,0)
+            banana.x = random.randrange(100,1000,5)
+            banana.y = 438
+            banana.rect.x = banana.x
+            banana.rect.y = banana.y
+            banana_list.add(banana)
+            big_list.add(banana)
+        for i in range(quantity/4):
+            banana = Banana(0,0)
+            banana.x = random.randrange(300,1200,5)
+            banana.y = 288
+            banana.rect.x = banana.x
+            banana.rect.y = banana.y
+            banana_list.add(banana)
+            big_list.add(banana)
+        for i in range(quantity/4):
+            banana = Banana(0,0)
+            banana.x = random.randrange(0,900,5)
+            banana.y = 188
+            banana.rect.x = banana.x
+            banana.rect.y = banana.y
+            banana_list.add(banana)
+            big_list.add(banana)
 
 #Introduce the Villian
 man = Human()
+
+great_list = pygame.sprite.Group()
 
 def changePosition(ladder, x, y):
     """ Function modifies the postion of the ladder """
@@ -94,14 +146,24 @@ def makeLadders():
 
 def generateBoard():
     for i in range(0,45):
+        new_block = Board(i*30,570)
+        block_list.add(new_block)
         DISPLAYSURF.blit(board.image,(i*30,570))
     for i in range(0,30):
+        new_block = Board(100+i*30,470)
+        block_list.add(new_block)
         DISPLAYSURF.blit(board.image,(100+i*30,470))
     for i in range(0,30):
+        new_block = Board(300+i*30,320)
+        block_list.add(new_block)
         DISPLAYSURF.blit(board.image,(300+i*30,320))
     for i in range(0,30):
+        new_block = Board(i*30,220)
+        block_list.add(new_block)
         DISPLAYSURF.blit(board.image,(i*30,220))
     for i in range(0,15):
+        new_block = Board(150+i*30,120)
+        block_list.add(new_block)
         DISPLAYSURF.blit(board.image,(150+i*30,120))
 
 def boundaryCheck():
@@ -126,7 +188,7 @@ def canClimb():
     elif m > ladder_3.x-15 and m <ladder_3.x+15:
         if y <= ladder_3.y+50 and y >= ladder_3.y-62:
             donkey.canClimbUp = True
-        elif y <= ladder_4.y+42 and y >= ladder_4.y-62:
+        elif y <= ladder_4.y+44 and y >= ladder_4.y-62:
             donkey.canClimbUp = True
         else:
             donkey.canClimbUp = False
@@ -174,14 +236,12 @@ def canHorizontal():
     else:
         donkey.canMoveSide = True
 
-
-
 def renderImage(body,x,y):
     DISPLAYSURF.blit(body,(x,y))
 
 def main():
     gameOver = False
-
+    check = 0
     while not gameOver:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -214,6 +274,10 @@ def main():
         #Once the background has been generated we make the board
         generateBoard()
         
+        #MakeBananas
+        makeBananas(16,check)
+        check = 1
+
         #Make the ladders
         makeLadders()
 
@@ -221,6 +285,9 @@ def main():
         boundaryCheck()
 
         donkey.canClimbUp = False
+        donkey.update()  
+        banana_list.draw(DISPLAYSURF)
+        block_hit_list = pygame.sprite.spritecollide(donkey,banana_list,True)
 
         #Change the Display location of the Donkey
         renderImage(donkey.body, donkey.x, donkey.y)
