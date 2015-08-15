@@ -54,3 +54,13 @@ class Donkey(Person,pygame.sprite.Sprite):
     def cannotClimb():
         self.canClimbUp = False
         self.canClimbDown = False
+
+    def moveUp(self):
+        self.y_Change = 5
+        self.y = self.y - self.y_Change
+        self.body = pygame.image.load('donkey_ass.png')
+
+    def moveDown(self):
+        self.y_Change = -5
+        self.y = self.y - self.y_Change
+        self.body = pygame.image.load('donkey_ass.png')

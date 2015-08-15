@@ -54,6 +54,9 @@ green = (0,128,0)
 clock = pygame.time.Clock()
 FPS = 30
 
+#Introduce fonts
+font = pygame.font.SysFont(None, 25) # Font Size 25
+
 #Alias Directions
 UP = 'up'
 DOWN = 'down'
@@ -90,7 +93,7 @@ def makeBananas(quantity,check):
     if check == 0 :
         for i in range(quantity/4):
             banana = Banana(0,0)
-            banana.x = random.randrange(0,display_Width,5)
+            banana.x = random.randrange(0,display_Width-40,30)
             banana.y = 538
             banana.rect.x = banana.x
             banana.rect.y = banana.y
@@ -98,7 +101,7 @@ def makeBananas(quantity,check):
             big_list.add(banana)
         for i in range(quantity/4):
             banana = Banana(0,0)
-            banana.x = random.randrange(100,1000,5)
+            banana.x = random.randrange(100,1000,30)
             banana.y = 438
             banana.rect.x = banana.x
             banana.rect.y = banana.y
@@ -106,7 +109,7 @@ def makeBananas(quantity,check):
             big_list.add(banana)
         for i in range(quantity/4):
             banana = Banana(0,0)
-            banana.x = random.randrange(300,1200,5)
+            banana.x = random.randrange(300,display_Width-40,30)
             banana.y = 288
             banana.rect.x = banana.x
             banana.rect.y = banana.y
@@ -114,7 +117,7 @@ def makeBananas(quantity,check):
             big_list.add(banana)
         for i in range(quantity/4):
             banana = Banana(0,0)
-            banana.x = random.randrange(0,900,5)
+            banana.x = random.randrange(0,900,30)
             banana.y = 188
             banana.rect.x = banana.x
             banana.rect.y = banana.y
@@ -123,7 +126,6 @@ def makeBananas(quantity,check):
 
 #Introduce the Villian
 man = Human()
-
 great_list = pygame.sprite.Group()
 
 def changePosition(ladder, x, y):
@@ -166,6 +168,10 @@ def generateBoard():
         block_list.add(new_block)
         DISPLAYSURF.blit(board.image,(150+i*30,120))
 
+def printMessage(msg, color):
+    show_text = font.render(msg, True, color)
+    DISPLAYSURF.blit(show_text,[1100,10])
+
 def boundaryCheck():
     if donkey.x > display_Width - image_Width or donkey.x < 0 or donkey.canMoveSide == False:
         donkey.x_Stop()
@@ -198,16 +204,6 @@ def canClimb():
         else:
             donkey.canClimbUp = False
 
-def canGoUp():
-    canClimb()
-    if donkey.canClimbUp == False:
-        donkey.y_Stop()
-
-def canGoDown():
-    canClimb()
-    if donkey.canClimbUp == False:
-        donkey.y_Stop()
-
 def canHorizontal():
     m = donkey.x
     y = donkey.y
@@ -236,12 +232,23 @@ def canHorizontal():
     else:
         donkey.canMoveSide = True
 
+def canGoUp():
+    canClimb()
+    if donkey.canClimbUp == False:
+        donkey.y_Stop()
+
+def canGoDown():
+    canClimb()
+    if donkey.canClimbUp == False:
+        donkey.y_Stop()
+
 def renderImage(body,x,y):
     DISPLAYSURF.blit(body,(x,y))
 
 def main():
     gameOver = False
     check = 0
+    score = 0
     while not gameOver:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -274,6 +281,9 @@ def main():
         #Once the background has been generated we make the board
         generateBoard()
         
+        #MoveHuman
+        man.update(150,600)
+
         #MakeBananas
         makeBananas(16,check)
         check = 1
@@ -288,10 +298,19 @@ def main():
         donkey.update()  
         banana_list.draw(DISPLAYSURF)
         block_hit_list = pygame.sprite.spritecollide(donkey,banana_list,True)
+        
+        if len(block_hit_list)>0:
+            score += len(block_hit_list)
+            print score
 
         #Change the Display location of the Donkey
         renderImage(donkey.body, donkey.x, donkey.y)
         renderImage(man.player, man.x, man.y)
+        
+        #Showing the message
+        message = "Score : "+str(score)
+        printMessage(message, white)
+        
 
         #Update the screen to show the latest changes
         pygame.display.update()

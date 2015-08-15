@@ -14,18 +14,26 @@ class Human(Person):
         self.y = 50
         self.x_Change = 0
         self.y_Change = 0
+        self.direction = 0
 
     def moveLeft(self):
-        self.x_Change = -3
+        self.x_Change = -2
         self.x = self.x + self.x_Change
 
     def moveRight(self):
-        self.x_Change = 3
+        self.x_Change = 2
         self.x = self.x + self.x_Change
 
     def stop(self):
         self.x -= self.x_Change
 
-    def randomMove(self):
-        return random.randrange(-1,2)
-
+    def Update(self, x1, x2):
+        self.direction = random.randrange(-1,2)
+        if self.direction < 0:
+            self.moveLeft()
+        else:
+            self.moveRight()
+        if self.x >= x1 and self.x <= x2:
+            pass
+        else:
+            self.stop()
