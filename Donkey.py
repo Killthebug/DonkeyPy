@@ -16,15 +16,20 @@ class Donkey(Person):
         self.body = pygame.image.load('donkey_left.png')
         self.x_Change = 0
         self.y_Change = 0
+        self.canMoveSide = True
+        self.canClimbUp = False
+        self.canClimbDown = False
 
     def moveLeft(self):
         self.x_Change = -5
         self.x = self.x + self.x_Change
+        self.canMoveSide = False
         self.body = pygame.image.load('donkey_left.png')
 
     def moveRight(self):
         self.x_Change = 5
         self.x = self.x + self.x_Change
+        self.canMoveSide = False
         self.body = pygame.image.load('donkey.png')
 
     def playerDead(self):
@@ -38,3 +43,7 @@ class Donkey(Person):
         
     def y_Stop(self):    
         self.y += self.y_Change
+
+    def cannotClimb():
+        self.canClimbUp = False
+        self.canClimbDown = False

@@ -105,7 +105,7 @@ def generateBoard():
         DISPLAYSURF.blit(board.image,(150+i*30,120))
 
 def boundaryCheck():
-    if donkey.x > display_Width - image_Width or donkey.x < 0:
+    if donkey.x > display_Width - image_Width or donkey.x < 0 or donkey.canMoveSide == False:
         donkey.x_Stop()
     if donkey.y > 538:
         donkey.y_Stop()
@@ -146,6 +146,35 @@ def canGoDown():
     if donkey.canClimbUp == False:
         donkey.y_Stop()
 
+def canHorizontal():
+    m = donkey.x
+    y = donkey.y
+    if m > ladder_1.x-30 and m <ladder_1.x+30:
+        if y <= ladder_1.y+37 and y >= ladder_1.y-61:
+            donkey.canMoveSide = False
+        else:
+            donkey.canMoveSide = True
+    elif m > ladder_2.x-30 and m <ladder_2.x+30:
+        if y <= ladder_2.y+37 and y >= ladder_2.y-61:
+            donkey.canMoveSide = False
+        else:
+            donkey.canMoveSide = True
+    elif m > ladder_3.x-30 and m <ladder_3.x+30:
+        if y <= ladder_3.y+50 and y >= ladder_3.y-61:
+            donkey.canMoveSide = False
+        elif y <= ladder_4.y and y >= ladder_4.y-62:
+            donkey.canMoveSide = False
+        else:
+            donkey.canMoveSide = True
+    elif m > ladder_5.x-30 and m <ladder_5.x+30:
+        if y <= ladder_5.y+37 and y >= ladder_5.y-61:
+            donkey.canMoveSide = False
+        else:
+            donkey.canMoveSide = True
+    else:
+        donkey.canMoveSide = True
+
+
 
 def renderImage(body,x,y):
     DISPLAYSURF.blit(body,(x,y))
@@ -162,9 +191,11 @@ def main():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 donkey.moveLeft()
+                canHorizontal()
 
             elif event.key == pygame.K_RIGHT:
                 donkey.moveRight()
+                canHorizontal()
 
             elif event.key == pygame.K_UP:
                 donkey.moveUp()
@@ -188,6 +219,8 @@ def main():
 
         #Function Call the check if over flow occurs
         boundaryCheck()
+
+        donkey.canClimbUp = False
 
         #Change the Display location of the Donkey
         renderImage(donkey.body, donkey.x, donkey.y)

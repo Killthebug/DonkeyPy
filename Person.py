@@ -12,6 +12,7 @@ class Person():
         self.x_Change = 0
         self.y_Change = 0
         self.body = None
+        self.canMoveSide = True
 
     def moveLeft(self):
         self.x_Change = -5
