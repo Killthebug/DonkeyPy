@@ -1,3 +1,5 @@
+#The Protagonish of the story trying to win his girl-friend
+
 import pygame
 import os
 import sys

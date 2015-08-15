@@ -1,3 +1,5 @@
+#Ladders through which the donkey can climb up
+
 import pygame
 import os
 import sys

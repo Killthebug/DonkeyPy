@@ -1,3 +1,5 @@
+#Class FireBall that defines the fireballs given out by the Donkey
+
 import pygame
 import sys
 import os

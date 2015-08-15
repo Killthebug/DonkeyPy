@@ -1,3 +1,5 @@
+#Parent class giving basic movement functionality to the characters in the game
+
 import pygame
 import os
 import sys

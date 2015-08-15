@@ -3,6 +3,7 @@
 #############################################################################
 # File name : donkeyKong.py
 # Purpose : A game for SSAD : Assignment 1
+# Game Difficult : High
 # Start date : 11/08/2015
 # Author : Jaipal Singh Goud
 ############################################################################
@@ -46,7 +47,7 @@ image_Height = 30
 
 #Setup the Display
 DISPLAYSURF = pygame.display.set_mode((display_Width , display_Height))
-pygame.display.set_caption('Donkeypy')
+pygame.display.set_caption('DonkeyPy')
 
 #Define the colors
 white = (255,255,255)
@@ -113,6 +114,8 @@ banana_list = pygame.sprite.Group()
 
 def makeBananas(quantity,check):
     if check == 0 :
+        for bananas in banana_list:
+            banana_list.remove(bananas)
         for i in range(quantity/4):
             banana = Banana(0,0)
             banana.x = random.randrange(0,display_Width-40,30)
@@ -357,7 +360,6 @@ def renderImage(body,x,y):
 def main():
     gameOver = False
     gameOverDone = False
-    score = 0
     check = 0
     counter = 0
     while not gameOverDone:
@@ -372,11 +374,11 @@ def main():
             message = "Final Score : "+str(donkey.score)
             message2 = "Game Over "
             message3 = "Thanks For Playing!"
-            message4 = "Press 'q' to Quit"
-            message5 = "Press 'r' to Reset"
+            message4 = "Press 'q' to : Quit"
+            message5 = "Press 'r' to : Reset"
             printMessage(message, white, 490, 350)
-            printMessage(message4, white, 490, 350)
-            printMessage(message5, white, 490, 350)
+            printMessage(message4, white, 485, 370)
+            printMessage(message5, white, 482, 390)
             printMessage(message2, red, 510, 250)
             printMessage(message3, red, 470, 280)
             pygame.display.update()
@@ -391,12 +393,11 @@ def main():
                         for fires in fire_list:
                             fire_list.remove(fires)
                         gameOver = False
-                        check = 1
+                        check = 0
                     if event.key == pygame.K_q:
                         gameOverDone = False
                         pygame.quit()
                         quit()
-
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -405,19 +406,19 @@ def main():
                 quit()
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_a:
                 donkey.moveLeft()
                 canHorizontal()
 
-            elif event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_d:
                 donkey.moveRight()
                 canHorizontal()
 
-            elif event.key == pygame.K_UP:
+            elif event.key == pygame.K_w:
                 donkey.moveUp()
                 checkWall_Up()
 
-            elif event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_s:
                 donkey.moveDown()
                 checkWall_Down()
 
@@ -470,7 +471,8 @@ def main():
         renderImage(donkey.body, donkey.x, donkey.y)
         renderImage(man.player, man.x, man.y)
         renderImage(queen.image, queen.rect.x, queen.rect.y)
-            
+        
+        #Constantly Check if the Game is over
         gameOver = checkGameStatus()
         
         #Showing the message
@@ -483,7 +485,7 @@ def main():
         pygame.display.update()
         clock.tick(60)
 
-
+#Initiate main running loop
 if __name__ == '__main__': 
     main()
     pygame.quit()

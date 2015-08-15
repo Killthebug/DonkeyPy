@@ -1,3 +1,5 @@
+#This defines the very basic building block of the floor and the various levels that this game is made up of
+
 import pygame
 import sys
 import re

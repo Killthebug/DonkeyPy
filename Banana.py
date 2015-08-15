@@ -1,3 +1,5 @@
+#Class definining the Bananas, replaces coins as in the original game
+
 import pygame
 import sys
 import re
