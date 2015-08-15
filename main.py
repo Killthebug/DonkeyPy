@@ -293,12 +293,16 @@ def canFallDown():
         else:
             fires.canFallDown = False
 
-def canGoUp():
+def getPosition(body):
+    pos = [body.x , body.y]
+    return pos
+
+def checkWall_Up():
     canClimb()
     if donkey.canClimbUp == False:
         donkey.y_Stop()
 
-def canGoDown():
+def checkWall_Down():
     canClimb()
     if donkey.canClimbUp == False:
         donkey.y_Stop()
@@ -321,27 +325,58 @@ def handleFire():
             fires.moveDown()
         DISPLAYSURF.blit(fires.image,(fires.x,fires.y))
 
+def collectCoin():
+    block_hit_list = pygame.sprite.spritecollide(donkey,banana_list,True)
+    if len(block_hit_list)>0:
+        donkey.score += len(block_hit_list)*5
+        print donkey.score
+
+def checkCollision():
+    for fires in fire_list:
+        handleFire()
+        fire_hit_list = pygame.sprite.spritecollide(fires, block_list, False)
+        fires.find_Level()
+        fires.moveWeird()
+        player_fire_hit_list = pygame.sprite.spritecollide(donkey, fire_list, True)
+        if len(player_fire_hit_list) > 0:
+            donkey.lives -= 1
+            donkey.resetPos()
+
+def checkGameStatus():
+    win_list = pygame.sprite.spritecollide(donkey, queen_list, False)
+    if len(win_list) > 0:
+        donkey.score += 50
+        donkey.win = True
+        return True
+    else:
+        return False
+
 def renderImage(body,x,y):
     DISPLAYSURF.blit(body,(x,y))
-
 
 def main():
     gameOver = False
     gameOverDone = False
-    check = 0
     score = 0
+    check = 0
     counter = 0
     while not gameOverDone:
         if donkey.lives == 0:
+            donkey.Penalize()
+            donkey.win = False
             gameOver = True
             gameOverDone = False
-
+        
         while gameOver == True:
             DISPLAYSURF.fill(black)
-            message = "Final Score : "+str(score)
+            message = "Final Score : "+str(donkey.score)
             message2 = "Game Over "
             message3 = "Thanks For Playing!"
-            printMessage(message, white, 500, 350)
+            message4 = "Press 'q' to Quit"
+            message5 = "Press 'r' to Reset"
+            printMessage(message, white, 490, 350)
+            printMessage(message4, white, 490, 350)
+            printMessage(message5, white, 490, 350)
             printMessage(message2, red, 510, 250)
             printMessage(message3, red, 470, 280)
             pygame.display.update()
@@ -350,6 +385,18 @@ def main():
                     gameOverDone = False
                     pygame.quit()
                     quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_r:
+                        donkey.newGame()
+                        for fires in fire_list:
+                            fire_list.remove(fires)
+                        gameOver = False
+                        check = 1
+                    if event.key == pygame.K_q:
+                        gameOverDone = False
+                        pygame.quit()
+                        quit()
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -368,11 +415,11 @@ def main():
 
             elif event.key == pygame.K_UP:
                 donkey.moveUp()
-                canGoUp()
+                checkWall_Up()
 
             elif event.key == pygame.K_DOWN:
                 donkey.moveDown()
-                canGoDown()
+                checkWall_Down()
 
             elif event.key == pygame.K_SPACE:
                 Jump()
@@ -393,12 +440,15 @@ def main():
         man.Update(220,600)
 
         #MakeBananas
-        makeBananas(16,check)
+        makeBananas(20,check)
        
         #MakeFire
         if counter % 120 == 0 :
             makeFire()
+        
         check = 1
+       
+        #Implement Gravity
         gravity()
 
         #Make the ladders
@@ -410,34 +460,21 @@ def main():
         donkey.canClimbUp = False
         donkey.update()  
         
-       # fire_list.draw(DISPLAYSURF) 
-        for fires in fire_list:
-            handleFire()
-            fire_hit_list = pygame.sprite.spritecollide(fires, block_list, False)
-            fires.find_Level()
-            fires.moveWeird()
-            player_fire_hit_list = pygame.sprite.spritecollide(donkey, fire_list, True)
-            if len(player_fire_hit_list) > 0:
-                donkey.lives -= 1
+        #fire_list.draw(DISPLAYSURF)
+        checkCollision()
         
         banana_list.draw(DISPLAYSURF)
-        block_hit_list = pygame.sprite.spritecollide(donkey,banana_list,True)
-        
-        if len(block_hit_list)>0:
-            score += len(block_hit_list)
-            print score
+        collectCoin()
 
         #Change the Display location of the Donkey
         renderImage(donkey.body, donkey.x, donkey.y)
         renderImage(man.player, man.x, man.y)
         renderImage(queen.image, queen.rect.x, queen.rect.y)
             
-        win_list = pygame.sprite.spritecollide(donkey, queen_list, False)
-        if len(win_list) > 0:
-            gameOver = True
+        gameOver = checkGameStatus()
         
         #Showing the message
-        message = "Score : "+str(score)
+        message = "Score : "+str(donkey.score)
         printMessage(message, white, 1100, 10)
         message = " Lives : "+str(donkey.lives)
         printMessage(message, white, 1100, 40)
