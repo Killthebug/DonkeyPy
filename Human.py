@@ -38,7 +38,6 @@ class Human(Person):
         if x2 - self.x < 40:
             self.direction = 1
 
-
         if self.x >= x1 and self.x <= x2:
             pass
         else:

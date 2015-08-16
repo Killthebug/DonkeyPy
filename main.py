@@ -21,6 +21,7 @@ import Board
 import Banana
 import Donkey
 import Ladder
+import Fire
 from socket import *
 from pygame.locals import *
 from Person import *
@@ -30,6 +31,7 @@ from Human import *
 from Ladder import *
 from Banana import *
 from time import *
+from Fire import *
 
 #Important to begin and initialize everything
 pygame.init()
@@ -86,6 +88,20 @@ ladder_4 = Ladder()
 ladder_list.add(ladder_4)
 ladder_5 = Ladder()
 ladder_list.add(ladder_5)
+
+#Bring Home the Fire !
+fire_list = pygame.sprite.Group()
+
+def makeFire(quanity, check):
+    if check == 0:
+        for i in range(4):
+            fireball = Fire(0,0)
+            fireball.x = random.randrange(170,600,30)
+            fireball.y = 104
+            fireball.rect.x = fireball.x
+            fireball.rect.y = fireball.y
+            fire_list.add(fireball)
+
 
 #Introduce the Bananas
 banana_list = pygame.sprite.Group()
@@ -242,6 +258,35 @@ def canHorizontal():
             donkey.canMoveSide = True
     else:
         donkey.canMoveSide = True
+    
+def canFallDown():
+    for fires in fire_list:
+        m = fires.x
+        y = fires.y
+        if m > ladder_1.x-15 and m <ladder_1.x+15:
+            if y <= ladder_1.y+50 and y >= ladder_1.y-62:
+                fires.canFallDown = True
+            else:
+                fires.canFallDown = False
+        elif m > ladder_2.x-15 and m <ladder_2.x+15:
+            if y <= ladder_2.y+50 and y >= ladder_2.y-62:
+                fires.canFallDown = True
+            else:
+                fires.canFallDown = False
+        elif m > ladder_3.x-15 and m <ladder_3.x+15:
+            if y <= ladder_3.y+50 and y >= ladder_3.y-62:
+                fires.canFallDown = True
+            elif y <= ladder_4.y+50 and y >= ladder_4.y-62:
+                fires.canFallDown = True
+            else:
+                fires.canFallDown = False
+        elif m > ladder_5.x-15 and m <ladder_5.x+15:
+            if y <= ladder_5.y+50 and y >= ladder_5.y-62:
+                fires.canFallDown = True
+            else:
+                fires.canFallDown = False
+        else:
+            fires.canFallDown = False
 
 def canGoUp():
     canClimb()
@@ -262,8 +307,18 @@ def Jump():
     else:
         donkey.canJump = True
 
+def handleFire():
+    canFallDown()
+    for fires in fire_list:
+        print "1 : ",fires.y
+        if fires.canFallDown == True :
+            fires.moveDown()
+        print "2 : ",fires.y
+        DISPLAYSURF.blit(fires.image,(fires.x,fires.y))
+
 def renderImage(body,x,y):
     DISPLAYSURF.blit(body,(x,y))
+
 
 def main():
     gameOver = False
@@ -309,8 +364,10 @@ def main():
 
         #MakeBananas
         makeBananas(16,check)
+       
+        #MakeFire
+        makeFire(5,check)
         check = 1
-        
         gravity()
 
         #Make the ladders
@@ -321,6 +378,14 @@ def main():
 
         donkey.canClimbUp = False
         donkey.update()  
+        
+       # fire_list.draw(DISPLAYSURF) 
+        for fires in fire_list:
+            handleFire()
+            fire_hit_list = pygame.sprite.spritecollide(fires, block_list, False)
+            fires.find_Level()
+            fires.moveWeird()
+        
         banana_list.draw(DISPLAYSURF)
         block_hit_list = pygame.sprite.spritecollide(donkey,banana_list,True)
         
