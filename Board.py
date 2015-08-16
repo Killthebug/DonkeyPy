@@ -10,8 +10,11 @@ class Board(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('brick.png')
         self.width = 30
+        self.rect = self.image.get_rect()
         self.x = x
         self.y = y
+        self.rect.x = x
+        self.rect.y = y
 
     def changeImage(self, newImage):
         self.image = pygame.image.load(newImage)

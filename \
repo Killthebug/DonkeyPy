@@ -183,12 +183,9 @@ def canFall():
     y = donkey.y
     collide_list = pygame.sprite.Group()
     collide_list = pygame.sprite.spritecollide(donkey, block_list, False)
-    print collide_list
-    print len(collide_list)
     if len(collide_list) == 0:
         donkey.canClimbUp = True
-    print donkey.canClimbUp
-
+        return
     if m > ladder_1.x-15 and m <ladder_1.x+15:
         if y <= ladder_1.y+42 and y >= ladder_1.y-62:
             donkey.canClimbUp = True
@@ -207,7 +204,7 @@ def canFall():
         else:
             donkey.canClimbUp = False
     elif m > ladder_5.x-15 and m <ladder_5.x+15:
-        if y <= ladder_5.y+42 and y >= ladder_5.y-62:
+        if y <= ladder_5.y+70 and y >= ladder_5.y-62:
             donkey.canClimbUp = True
         else:
             donkey.canClimbUp = False
@@ -234,7 +231,7 @@ def canClimb():
         else:
             donkey.canClimbUp = False
     elif m > ladder_5.x-15 and m <ladder_5.x+15:
-        if y <= ladder_5.y+42 and y >= ladder_5.y-62:
+        if y <= ladder_5.y+70 and y >= ladder_5.y-62:
             donkey.canClimbUp = True
         else:
             donkey.canClimbUp = False
@@ -278,11 +275,8 @@ def canGoDown():
         donkey.y_Stop()
 
 def gravity():
-    canGoDown()
-    if donkey.canClimbUp == True :
-        donkey.calc_Gravity()
-    else:
-        donkey.y_Change = 0
+    donkey.calc_Gravity()
+
 def renderImage(body,x,y):
     DISPLAYSURF.blit(body,(x,y))
 
@@ -322,8 +316,8 @@ def main():
         #Once the background has been generated we make the board
         generateBoard()
         
-        donkey.canClimbUp = False
         #Gravity
+        canGoDown()
         gravity()
         
         #MoveHuman
