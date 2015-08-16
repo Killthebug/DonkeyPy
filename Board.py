@@ -12,9 +12,12 @@ class Board(pygame.sprite.Sprite):
         self.width = 30
         self.x = x
         self.y = y
+<<<<<<< HEAD
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y-1
+=======
+>>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
 
     def changeImage(self, newImage):
         self.image = pygame.image.load(newImage)

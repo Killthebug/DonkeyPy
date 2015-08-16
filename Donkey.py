@@ -18,7 +18,10 @@ class Donkey(Person,pygame.sprite.Sprite):
         self.body = pygame.image.load('donkey_left.png')
         self.x_Change = 0
         self.y_Change = 0
+<<<<<<< HEAD
         self.canJump = True
+=======
+>>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
         self.rect = self.body.get_rect()
         self.canMoveSide = True
         self.canClimbUp = False
@@ -51,14 +54,20 @@ class Donkey(Person,pygame.sprite.Sprite):
         
     def y_Stop(self):    
         self.y += self.y_Change
+<<<<<<< HEAD
         self.y_Change = 0
+=======
+>>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
 
     def cannotClimb():
         self.canClimbUp = False
         self.canClimbDown = False
+<<<<<<< HEAD
     
     def Jump(self):
         self.y -= 22
+=======
+>>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
 
     def moveUp(self):
         self.y_Change = 5
