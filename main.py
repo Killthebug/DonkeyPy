@@ -29,10 +29,7 @@ from Board import *
 from Human import *
 from Ladder import *
 from Banana import *
-<<<<<<< HEAD
 from time import *
-=======
->>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
 
 #Important to begin and initialize everything
 pygame.init()
@@ -150,7 +147,6 @@ def makeLadders():
     changePosition(ladder_5,546,500)
     renderImage(ladder_5.body, ladder_5.x, ladder_5.y)
 
-<<<<<<< HEAD
 def generateBoard(check):
     if check == 0:
         for i in range(0,45):
@@ -183,29 +179,6 @@ def gravity():
     if len(gravity_list) == 0 and donkey.canClimbUp == False:
         donkey.y = donkey.y + 3
     print gravity_list
-=======
-def generateBoard():
-    for i in range(0,45):
-        new_block = Board(i*30,570)
-        block_list.add(new_block)
-        DISPLAYSURF.blit(board.image,(i*30,570))
-    for i in range(0,30):
-        new_block = Board(100+i*30,470)
-        block_list.add(new_block)
-        DISPLAYSURF.blit(board.image,(100+i*30,470))
-    for i in range(0,30):
-        new_block = Board(300+i*30,320)
-        block_list.add(new_block)
-        DISPLAYSURF.blit(board.image,(300+i*30,320))
-    for i in range(0,30):
-        new_block = Board(i*30,220)
-        block_list.add(new_block)
-        DISPLAYSURF.blit(board.image,(i*30,220))
-    for i in range(0,15):
-        new_block = Board(150+i*30,120)
-        block_list.add(new_block)
-        DISPLAYSURF.blit(board.image,(150+i*30,120))
->>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
 
 def printMessage(msg, color):
     show_text = font.render(msg, True, color)
@@ -247,40 +220,24 @@ def canHorizontal():
     m = donkey.x
     y = donkey.y
     if m > ladder_1.x-30 and m <ladder_1.x+30:
-<<<<<<< HEAD
         if y <= ladder_1.y+37 and y >= ladder_1.y-57:
-=======
-        if y <= ladder_1.y+37 and y >= ladder_1.y-61:
->>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
             donkey.canMoveSide = False
         else:
             donkey.canMoveSide = True
     elif m > ladder_2.x-30 and m <ladder_2.x+30:
-<<<<<<< HEAD
         if y <= ladder_2.y+37 and y >= ladder_2.y-57:
-=======
-        if y <= ladder_2.y+37 and y >= ladder_2.y-61:
->>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
             donkey.canMoveSide = False
         else:
             donkey.canMoveSide = True
     elif m > ladder_3.x-30 and m <ladder_3.x+30:
-<<<<<<< HEAD
         if y <= ladder_3.y+50 and y >= ladder_3.y-57:
-=======
-        if y <= ladder_3.y+50 and y >= ladder_3.y-61:
->>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
             donkey.canMoveSide = False
         elif y <= ladder_4.y and y >= ladder_4.y-62:
             donkey.canMoveSide = False
         else:
             donkey.canMoveSide = True
     elif m > ladder_5.x-30 and m <ladder_5.x+30:
-<<<<<<< HEAD
         if y <= ladder_5.y+37 and y >= ladder_5.y-57:
-=======
-        if y <= ladder_5.y+37 and y >= ladder_5.y-61:
->>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
             donkey.canMoveSide = False
         else:
             donkey.canMoveSide = True
@@ -297,7 +254,6 @@ def canGoDown():
     if donkey.canClimbUp == False:
         donkey.y_Stop()
 
-<<<<<<< HEAD
 def Jump():
     if donkey.canJump == True:
         donkey.Jump()
@@ -307,8 +263,6 @@ def Jump():
     else:
         donkey.canJump = True
 
-=======
->>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
 def renderImage(body,x,y):
     DISPLAYSURF.blit(body,(x,y))
 
@@ -338,14 +292,10 @@ def main():
             elif event.key == pygame.K_DOWN:
                 donkey.moveDown()
                 canGoDown()
-<<<<<<< HEAD
 
             elif event.key == pygame.K_SPACE:
                 Jump()
 
-=======
-        
->>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
         if event.type == pygame.KEYUP:
             donkey.reset()
 
@@ -353,11 +303,7 @@ def main():
         DISPLAYSURF.fill(blue)
         
         #Once the background has been generated we make the board
-<<<<<<< HEAD
         generateBoard(check)
-=======
-        generateBoard()
->>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
         
         #MoveHuman
         man.update(150,600)
@@ -365,11 +311,8 @@ def main():
         #MakeBananas
         makeBananas(16,check)
         check = 1
-<<<<<<< HEAD
         
         gravity()
-=======
->>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
 
         #Make the ladders
         makeLadders()
@@ -393,19 +336,11 @@ def main():
         #Showing the message
         message = "Score : "+str(score)
         printMessage(message, white)
-<<<<<<< HEAD
         print block_list        
 
         #Update the screen to show the latest changes
         pygame.display.update()
         clock.tick(60)
-=======
-        
-
-        #Update the screen to show the latest changes
-        pygame.display.update()
-        clock.tick(40)
->>>>>>> 2cf32d65461744be065cb5e670ca6c498d71b1db
 
 
 if __name__ == '__main__': 
