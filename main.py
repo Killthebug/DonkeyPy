@@ -92,15 +92,13 @@ ladder_list.add(ladder_5)
 #Bring Home the Fire !
 fire_list = pygame.sprite.Group()
 
-def makeFire(quanity, check):
-    if check == 0:
-        for i in range(4):
-            fireball = Fire(0,0)
-            fireball.x = random.randrange(170,600,30)
-            fireball.y = 104
-            fireball.rect.x = fireball.x
-            fireball.rect.y = fireball.y
-            fire_list.add(fireball)
+def makeFire():
+    fireball = Fire(0,0)
+    fireball.x = man.x
+    fireball.y = 104
+    fireball.rect.x = fireball.x
+    fireball.rect.y = fireball.y
+    fire_list.add(fireball)
 
 
 #Introduce the Bananas
@@ -324,6 +322,7 @@ def main():
     gameOver = False
     check = 0
     score = 0
+    counter = 0
     while not gameOver:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -353,6 +352,9 @@ def main():
         if event.type == pygame.KEYUP:
             donkey.reset()
 
+        #Increment Counter
+        counter += 1
+
         #The very first and bottom most layer
         DISPLAYSURF.fill(blue)
         
@@ -360,13 +362,14 @@ def main():
         generateBoard(check)
         
         #MoveHuman
-        man.Update(150,600)
+        man.Update(220,600)
 
         #MakeBananas
         makeBananas(16,check)
        
         #MakeFire
-        makeFire(5,check)
+        if counter % 120 == 0 :
+            makeFire()
         check = 1
         gravity()
 

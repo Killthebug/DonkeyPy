@@ -10,7 +10,7 @@ class Human(Person):
     """ Child Class of Person, defined the Villian """
     def __init__(self):
         self.player = pygame.image.load('human.png')
-        self.x = 200
+        self.x = 300
         self.y = 88
         self.x_Change = 0
         self.y_Change = 0
