@@ -178,7 +178,6 @@ def gravity():
     gravity_list = pygame.sprite.spritecollide(donkey, block_list, False)
     if len(gravity_list) == 0 and donkey.canClimbUp == False:
         donkey.y = donkey.y + 3
-    print gravity_list
 
 def printMessage(msg, color):
     show_text = font.render(msg, True, color)
@@ -306,7 +305,7 @@ def main():
         generateBoard(check)
         
         #MoveHuman
-        man.update(150,600)
+        man.Update(150,600)
 
         #MakeBananas
         makeBananas(16,check)
@@ -336,7 +335,6 @@ def main():
         #Showing the message
         message = "Score : "+str(score)
         printMessage(message, white)
-        print block_list        
 
         #Update the screen to show the latest changes
         pygame.display.update()
