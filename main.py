@@ -6,6 +6,7 @@
 # Game Difficult : High
 # Start date : 11/08/2015
 # Author : Jaipal Singh Goud
+# GIT Repo : https://github.com/Killthebug/DonkeyPy/
 ############################################################################
 
 import re
@@ -63,13 +64,16 @@ class App():
 
 #Introduce self.fonts
         self.font = pygame.font.SysFont(None, 25) # self.font Size 25
-
+        self.bigfont = pygame.font.SysFont(None, 50) # self.font Size 25
+        
 #Alias Directions
         self.UP = 'up'
         self.DOWN = 'down'
         self.LEFT = 'left'
         self.RIGHT = 'right'
-
+        self.jumpCounter = 10
+        self.mod = 120
+        self.level = 1
         self.big_list = pygame.sprite.Group()
 
 #Introduce our players
@@ -175,6 +179,8 @@ class App():
 
     def generateBoard(self,check):
         if check == 0:
+            for blocks in self.block_list:
+                self.block_list.remove(blocks)
             for i in range(0,45):
                 self.new_block = Board(i*30,570)
                 self.block_list.add(self.new_block)
@@ -205,6 +211,10 @@ class App():
         if len(self.gravity_list) == 0 and self.donkey.canClimbUp == False:
             self.donkey.y = self.donkey.y + 1.5
 
+    def printMessageBig(self,msg, color, x, y):
+        self.show_text = self.bigfont.render(msg, True, color)
+        self.DISPLAYSURF.blit(self.show_text,[x,y])
+    
     def printMessage(self,msg, color, x, y):
         self.show_text = self.font.render(msg, True, color)
         self.DISPLAYSURF.blit(self.show_text,[x,y])
@@ -273,6 +283,7 @@ class App():
         for fires in self.fire_list:
             self.m = fires.x
             self.y = fires.y
+            self.collision_list = pygame.sprite.spritecollide(fires, self.block_list, False)
             if self.m > self.ladder_1.x-15 and self.m <self.ladder_1.x+15:
                 if self.y <= self.ladder_1.y+50 and self.y >= self.ladder_1.y-62:
                     fires.canFallDown = True
@@ -295,8 +306,14 @@ class App():
                     fires.canFallDown = True
                 else:
                     fires.canFallDown = False
+            elif len(self.collision_list) == 0:
+                fires.canFallDown = True
             else:
                 fires.canFallDown = False
+        for fires in self.fire_list:
+            if (fires.x < 30 or fires.x > 1200) and self.y > 500:
+                self.fire_list.remove(fires)
+
 
     def getPosition(self,body):
         self.pos = [body.x , body.y]
@@ -314,9 +331,10 @@ class App():
 
     def Jump(self):
         if self.donkey.canJump == True:
-            for i in range(210):
-                self.donkey.Jump()
-                self.renderImage(self.donkey.body, self.donkey.x, self.donkey.y)
+            self.donkey.Jump()
+            self.renderImage(self.donkey.body, self.donkey.x, self.donkey.y)
+        for i in range(1000):
+            self.jumpCounter += 1
         self.platform_hit_list = pygame.sprite.spritecollide(self.donkey, self.block_list, False)
         if len(self.platform_hit_list) == 0:
             self.donkey.canJump = False
@@ -327,7 +345,11 @@ class App():
         self.canFallDown()
         for fires in self.fire_list:
             if fires.canFallDown == True :
+                fires.canMoveSide = False
+                fires.direction = random.randint(1,200)%2
                 fires.moveDown()
+            else:
+                fires.canMoveSide = True
             self.DISPLAYSURF.blit(fires.image,(fires.x,fires.y))
 
     def collectCoin(self):
@@ -350,6 +372,9 @@ class App():
         self.win_list = pygame.sprite.spritecollide(self.donkey, self.queen_list, False)
         if len(self.win_list) > 0:
             self.donkey.score += 50
+            self.level += 1
+            if (self.mod > 60):
+                self.mod -= 20
             self.donkey.win = True
             return True
         else:
@@ -382,6 +407,9 @@ class App():
                 self.printMessage(self.message5, self.white, 482, 390)
                 self.printMessage(self.message2, self.red, 510, 250)
                 self.printMessage(self.message3, self.red, 470, 280)
+                if self.donkey.win == True:    
+                    self.message = "YOU WIN!"
+                    self.printMessageBig(self.message, self.red, 470, 200)
                 pygame.display.update()
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
@@ -442,10 +470,10 @@ class App():
             self.man.Update(220,600)
 
             #MakeBananas
-            self.makeBananas(20,self.check)
+            self.makeBananas(16+4*self.level,self.check)
            
             #MakeFire
-            if self.counter % 120 == 0 :
+            if self.counter % self.mod == 0 :
                 self.makeFire()
             
             self.check = 1
@@ -481,6 +509,8 @@ class App():
             self.printMessage(self.message, self.white, 1100, 10)
             self.message = " Lives : "+str(self.donkey.lives)
             self.printMessage(self.message, self.white, 1100, 40)
+            self.message6 = " Level : "+str(self.level)    
+            self.printMessage(self.message6, self.white, 1100, 70)
 
             #Update the screen to show the latest changes
             pygame.display.update()
